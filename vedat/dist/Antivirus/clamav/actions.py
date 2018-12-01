@@ -12,18 +12,6 @@ from pisi.actionsapi import shelltools
 def setup():
     #autotools.autoreconf("-fiv")
     autotools.configure("--prefix=/usr \
-                         --enable-id-check \
-                         --enable-clamdtop \
-                         --disable-static \
-                         --disable-clamav \
-                         --disable-fanotify \
-                         --disable-experimental \
-                         --disable-silent-rules \
-                         --with-system-tommath \
-                         --with-zlib=/usr \
-                         --with-no-cache \
-                         --with-system-llvm \
-                         --with-tcpwrappers \
                          --sysconfdir=/etc \
                          --with-dbdir=/var/lib/clamav")
     
@@ -35,11 +23,12 @@ def build():
 def install():
     autotools.rawInstall("DESTDIR=%s" % get.installDIR())
 
-    #pisitools.dodir("/run/clamav")
-    #pisitools.dodir("/var/lib/clamav")
-    #pisitools.dodir("/var/log/clamav")
-    #shelltools.touch(get.installDIR() + "/var/log/clamav/freshclam.log")
-    #shelltools.chmod(get.installDIR() + "/var/log/clamav/freshclam.log", 0600)
-    #shelltools.chown("%s/var/log/clamav/freshclam.log" % get.installDIR(), "clamav", "clamav")
+    pisitools.dodir("/run/clamav")
+    pisitools.dodir("/var/lib/clamav")
+    shelltools.chmod(get.installDIR() + "/var/lib/clamav", 0777)
+    pisitools.dodir("/var/log/clamav")
+    shelltools.touch(get.installDIR() + "/var/log/clamav/freshclam.log")
+    shelltools.chmod(get.installDIR() + "/var/log/clamav/freshclam.log", 0660)
+    shelltools.chown("%s/var/log/clamav/freshclam.log" % get.installDIR(), "clamav", "clamav")
 
-    pisitools.dodoc("AUTHORS", "BUGS", "COPYING*", "NEWS", "README", "ChangeLog", "FAQ")
+   
